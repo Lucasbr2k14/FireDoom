@@ -1,2 +1,2 @@
 pub mod cell;
-mod colors;
+pub mod colors;

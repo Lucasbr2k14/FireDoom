@@ -1,23 +1,75 @@
-extern crate sdl2;
-// Engine para executar o sdl2
-mod engine;
-use engine::Engine;
+use macroquad::{
+    miniquad,
+    prelude::{
+        Conf,
+        next_frame
+    }
+};
 
 // Todas as entidades
 mod entities;
 use entities::cell::Grid;
 
-fn main() -> Result<(), Box<dyn std::error::Error>> {
-    let mut engine = Engine::init(
-        "Game".to_string(),
-        [1280, 720]
-    )?;
+fn init_config() -> Conf {
+    Conf { 
+        window_title: "Fire Doom".to_string(), 
+        window_width: 1280, 
+        window_height: 720, 
+        fullscreen: false,
+        window_resizable: false,
+        platform: miniquad::conf::Platform {
+            swap_interval: Some(0),
+            ..Default::default()
+        },
+        
+        ..Default::default()
+    }
+}
 
-    engine.engine_loop();
+struct Engine {
+    window_size: [u16; 2],
+    window_name: String,
+    frame_count: u32,
+}
+
+impl Engine {
+    fn start_from_config() -> Self {
+        let config = init_config();
+        Self {
+            window_name: config.window_title,
+            frame_count: 0,
+            window_size: [
+                config.window_width as u16, 
+                config.window_height as u16
+            ]
+        }
+    }
+
+    async fn run(&mut self) {
+        loop {
+            
+            self.update();
+            self.draw();
+
+            next_frame().await
+        }
+    }
     
-    let mut grid = Grid::create(200, 200);
+    fn draw(&self) {}
+    fn update(&self) {}
+    
+}
 
-    grid.print();
 
-    Ok(())
+/*
+Para mudar o tamanho temos
+request_new_screen_size(w, h)
+*/
+
+#[macroquad::main(init_config)]
+async fn main() {
+    let mut engine = Engine::start_from_config();
+
+    engine.run().await;
+    
 }
