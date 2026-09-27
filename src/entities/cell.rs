@@ -117,6 +117,9 @@ impl Grid {
         self.grid[x][y] = v;
     }
 
+
+    /// Essa função é aonde está toda a lógica do automato
+    /// Cria novos morre e se propaga
     pub fn step(&mut self) {
         let cols = self.cols;
         let rows = self.rows;
