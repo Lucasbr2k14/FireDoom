@@ -1,15 +1,21 @@
 use macroquad::{
-    miniquad,
-    prelude::{
+    miniquad, prelude::{
+        Color,
         Conf,
-        next_frame
+        clear_background,
+        next_frame,
+        get_frame_time
     }
 };
 
 // Todas as entidades
 mod entities;
-use entities::cell::Grid;
+use entities::{
+    cell::Grid,
+    entity::Entity,
+};
 
+// Configurações para iniciar o macroquad
 fn init_config() -> Conf {
     Conf { 
         window_title: "Fire Doom".to_string(), 
@@ -30,6 +36,7 @@ struct Engine {
     window_size: [u16; 2],
     window_name: String,
     frame_count: u32,
+    entities: Vec<Box<dyn Entity>>,
 }
 
 impl Engine {
@@ -41,23 +48,42 @@ impl Engine {
             window_size: [
                 config.window_width as u16, 
                 config.window_height as u16
-            ]
+            ],
+            entities: Vec::new(),
         }
     }
 
     async fn run(&mut self) {
         loop {
+            clear_background(Color { r: 0.0, g:0.0, b:0.0, a:1.0 });            
             
-            self.update();
-            self.draw();
+            let delta = get_frame_time();
 
+            self.update(delta);
+            self.draw(delta);
+            
             next_frame().await
         }
     }
     
-    fn draw(&self) {}
-    fn update(&self) {}
+    /// Função a onde da todos os updates nas entidades
+    fn update(&mut self, delta:f32) {
+        for i in &mut self.entities {
+            i.update(delta);
+        }
+    }
     
+    /// Função para desenhar todas entidades
+    fn draw(&self, delta:f32) {
+        for i in &self.entities {
+            i.draw(delta);
+        }
+    }
+
+    /// Essa função é para adicionar uma entidade nova na engine
+    pub fn add_entity(&mut self, entity:Box<dyn Entity>) {
+        self.entities.push(entity);
+    }
 }
 
 
@@ -70,6 +96,9 @@ request_new_screen_size(w, h)
 async fn main() {
     let mut engine = Engine::start_from_config();
 
+    engine.add_entity(
+        Box::new(Grid::create(50, 50, 1., 5.))
+    );
+
     engine.run().await;
-    
 }

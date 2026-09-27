@@ -1,64 +1,40 @@
-use serde::{Deserialize, Serialize};
+use macroquad::color;
+// Esse arquivo serve somente para pegar as cores que estão configuradas no arquivo json
+use macroquad::prelude::Color;
 
-#[derive(Clone, Copy, Debug, Serialize, Deserialize)]
-pub struct Color {
-    pub r: u8,
-    pub g: u8,
-    pub b: u8,
+use serde::{
+    Serialize, 
+    Deserialize
+};
+
+use std::fs::File;
+use std::io::prelude::*;
+use std::ops::ControlFlow;
+
+/// Minha struct somente para criar o json e serializar ele
+#[derive(Debug, Serialize, Deserialize)]
+struct MyColor {
+    r: f32,
+    g: f32,
+    b: f32,
 }
 
-impl Color {
-    pub const fn rgb(r: u8, g: u8, b: u8) -> Self {
-        Self { r, g, b }
-    }
-}
+pub fn get(file:String) -> Vec<Color> {
+    
+    let mut file = File::open("FireDoom/colors.json")
+    .expect("Erro ao abrir o arquivo FireDoom/colors.json");
+    
+    let mut content:String = String::new();
 
-// Essa palheta de cores eu pedi para o chatGPT "Converter para mim"
-// De um repositório do github
-// Desse aqui:
-// https://github.com/filipedeschamps/doom-fire-algorithm/blob/master/playground/render-with-canvas/fire.js
+    let _ = file.read_to_string(&mut content);
 
-pub fn get() -> Vec<Color> {
+    let values:Vec<MyColor> = serde_json::from_str(&content)
+    .expect("Erro ao desserializar o json colors.json");
 
-    let fire_colors:Vec<Color> = vec![
-        Color::rgb(7, 7, 7),
-        Color::rgb(31, 7, 7),
-        Color::rgb(47, 15, 7),
-        Color::rgb(71, 15, 7),
-        Color::rgb(87, 23, 7),
-        Color::rgb(103, 31, 7),
-        Color::rgb(119, 31, 7),
-        Color::rgb(143, 39, 7),
-        Color::rgb(159, 47, 7),
-        Color::rgb(175, 63, 7),
-        Color::rgb(191, 71, 7),
-        Color::rgb(199, 71, 7),
-        Color::rgb(223, 79, 7),
-        Color::rgb(223, 87, 7),
-        Color::rgb(223, 87, 7),
-        Color::rgb(215, 95, 7),
-        Color::rgb(215, 95, 7),
-        Color::rgb(215, 103, 15),
-        Color::rgb(207, 111, 15),
-        Color::rgb(207, 119, 15),
-        Color::rgb(207, 127, 15),
-        Color::rgb(207, 135, 23),
-        Color::rgb(199, 135, 23),
-        Color::rgb(199, 143, 23),
-        Color::rgb(199, 151, 31),
-        Color::rgb(191, 159, 31),
-        Color::rgb(191, 159, 31),
-        Color::rgb(191, 167, 39),
-        Color::rgb(191, 167, 39),
-        Color::rgb(191, 175, 47),
-        Color::rgb(183, 175, 47),
-        Color::rgb(183, 183, 47),
-        Color::rgb(183, 183, 55),
-        Color::rgb(207, 207, 111),
-        Color::rgb(223, 223, 159),
-        Color::rgb(239, 239, 199),
-        Color::rgb(255, 255, 255),
-    ];
+    values.iter()
+    .map(
+        |v| Color::new(v.r as f32, v.g as f32, v.b as f32, 1.0)
+    )
+    .collect()
 
-    return fire_colors;
 }
