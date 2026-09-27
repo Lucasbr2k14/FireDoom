@@ -1,5 +1,3 @@
-use std::fmt::format;
-
 use macroquad::{
     color::WHITE, miniquad, prelude::{
         Color, Conf, clear_background, draw_text, get_fps, get_frame_time, next_frame
@@ -25,10 +23,10 @@ fn init_config() -> Conf {
         window_height: 720, 
         fullscreen: false,
         window_resizable: false,
-        // platform: miniquad::conf::Platform {
-        //     swap_interval: Some(0),
-        //     ..Default::default()
-        // },
+        platform: miniquad::conf::Platform {
+            swap_interval: Some(0),
+            ..Default::default()
+        },
         
         ..Default::default()
     }
@@ -57,6 +55,7 @@ impl Engine {
             debug: false
         }
     }
+
 
     /// Função a onde fica o loop da execução
     async fn run(&mut self) {
@@ -121,11 +120,6 @@ impl Engine {
             WHITE
         );
     }
-
-    
-
-
-
 }
 
 
@@ -141,10 +135,10 @@ async fn main() {
     let grid = Box::new(
         Grid::create(
             [250.0, 100.0],
-            50,  // Quantidade de linhas
-            50,  // Quantidade de colunas
+            60,  // Quantidade de linhas
+            60,  // Quantidade de colunas
             0.0,  // Tamanho do gap
-            5.0,  // Tamanho da celular
+            10.0, // Tamanho da celular
             20.0, // 20 updates por segundo
             get_colors("FireDoom/colors.json".to_string()) // Carregar as as cores
         )
