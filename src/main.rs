@@ -1,11 +1,9 @@
+use std::fmt::format;
+
 use macroquad::{
-    miniquad, prelude::{
-        Color,
-        Conf,
-        clear_background,
-        next_frame,
-        get_frame_time
-    }
+    color::WHITE, miniquad, prelude::{
+        Color, Conf, clear_background, draw_text, get_fps, get_frame_time, next_frame
+    }, telemetry::frame
 };
 
 // Todas as entidades
@@ -27,10 +25,10 @@ fn init_config() -> Conf {
         window_height: 720, 
         fullscreen: false,
         window_resizable: false,
-        platform: miniquad::conf::Platform {
-            swap_interval: Some(0),
-            ..Default::default()
-        },
+        // platform: miniquad::conf::Platform {
+        //     swap_interval: Some(0),
+        //     ..Default::default()
+        // },
         
         ..Default::default()
     }
@@ -64,6 +62,7 @@ impl Engine {
             let delta = get_frame_time();
 
             self.update(delta);
+            self.draw_fps();
             self.draw(delta);
             
             next_frame().await;
@@ -89,6 +88,32 @@ impl Engine {
     pub fn add_entity(&mut self, entity:Box<dyn Entity>) {
         self.entities.push(entity);
     }
+
+    pub fn draw_fps(&mut self) {
+        let fps = get_fps(); 
+        let frame_time = get_frame_time();
+
+        let fps_str = format!("fps: {}", fps);
+        let frame_time_str = format!("frame time: {}", frame_time);
+        draw_text(
+            fps_str, 
+            10.0, 
+            40.0, 
+            40.0, 
+            WHITE
+        );
+
+        draw_text(
+            frame_time_str, 
+            10.0, 
+            80.0, 
+            40.0, 
+            WHITE
+        );
+
+    }
+
+
 }
 
 
@@ -104,10 +129,10 @@ async fn main() {
     let grid = Box::new(
         Grid::create(
             [250.0, 100.0],
-            100,    // Quantidade de linhas
-            100,    // Quantidade de colunas
+            256,  // Quantidade de linhas
+            256,  // Quantidade de colunas
             0.0,  // Tamanho do gap
-            5.0, // Tamanho da celular
+            1.5,  // Tamanho da celular
             20.0, // 20 updates por segundo
             get_colors("FireDoom/colors.json".to_string()) // Carregar as as cores
         )

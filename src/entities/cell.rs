@@ -44,7 +44,15 @@ impl Vizinhos {
 
 impl Grid {
     /// Função construtora para criar a matriz e depois rendenizar 
-    pub fn create(position:[f32;2], rows:usize, cols:usize, gap:f32, size:f32, updates_ps:f32, colors:Vec<Color>) -> Self {
+    pub fn create(
+        position:[f32;2],
+        rows:usize,
+        cols:usize,
+        gap:f32,
+        size:f32,
+        updates_ps:f32,
+        colors:Vec<Color>
+    ) -> Self {
         Self { 
             grid: vec![vec![0u8; cols]; rows], // <- aqui eu vou ter que concertar porque provavelmente é ao contrario seria rows e cols
             rows: rows,
