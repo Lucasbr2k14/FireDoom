@@ -15,6 +15,10 @@ use entities::{
     entity::Entity,
 };
 
+// Cores
+mod colors;
+use colors::get_colors;
+
 // Configurações para iniciar o macroquad
 fn init_config() -> Conf {
     Conf { 
@@ -62,7 +66,8 @@ impl Engine {
             self.update(delta);
             self.draw(delta);
             
-            next_frame().await
+            next_frame().await;
+            self.frame_count += 1;
         }
     }
     
@@ -96,9 +101,19 @@ request_new_screen_size(w, h)
 async fn main() {
     let mut engine = Engine::start_from_config();
 
-    engine.add_entity(
-        Box::new(Grid::create(50, 50, 1., 5.))
+    let grid = Box::new(
+        Grid::create(
+            [250.0, 100.0],
+            100,    // Quantidade de linhas
+            100,    // Quantidade de colunas
+            0.0,  // Tamanho do gap
+            5.0, // Tamanho da celular
+            20.0, // 20 updates por segundo
+            get_colors("FireDoom/colors.json".to_string()) // Carregar as as cores
+        )
     );
+
+    engine.add_entity(grid);
 
     engine.run().await;
 }

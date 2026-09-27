@@ -1,6 +1,8 @@
-use macroquad::color;
 // Esse arquivo serve somente para pegar as cores que estão configuradas no arquivo json
-use macroquad::prelude::Color;
+use macroquad::{
+    prelude::Color
+    
+};
 
 use serde::{
     Serialize, 
@@ -9,7 +11,6 @@ use serde::{
 
 use std::fs::File;
 use std::io::prelude::*;
-use std::ops::ControlFlow;
 
 /// Minha struct somente para criar o json e serializar ele
 #[derive(Debug, Serialize, Deserialize)]
@@ -19,22 +20,21 @@ struct MyColor {
     b: f32,
 }
 
-pub fn get(file:String) -> Vec<Color> {
+pub fn get_colors(file:String) -> Vec<Color> {
     
-    let mut file = File::open("FireDoom/colors.json")
-    .expect("Erro ao abrir o arquivo FireDoom/colors.json");
-    
-    let mut content:String = String::new();
-
-    let _ = file.read_to_string(&mut content);
+    let mut content = include_str!("../FireDoom/colors.json");
 
     let values:Vec<MyColor> = serde_json::from_str(&content)
     .expect("Erro ao desserializar o json colors.json");
 
     values.iter()
     .map(
-        |v| Color::new(v.r as f32, v.g as f32, v.b as f32, 1.0)
+        |v| Color::new(
+            v.r / 255.0 as f32,
+            v.g / 255.0 as f32,
+            v.b / 255.0 as f32, 
+            1.0
+        )
     )
     .collect()
-
 }

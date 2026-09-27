@@ -11,4 +11,3 @@ serde = {
 
 macroquad = "0.4"
 serde_json = "1.0.151"
-
