@@ -39,6 +39,8 @@ struct Engine {
     window_name: String,
     frame_count: u32,
     entities: Vec<Box<dyn Entity>>,
+
+    debug: bool
 }
 
 impl Engine {
@@ -52,9 +54,11 @@ impl Engine {
                 config.window_height as u16
             ],
             entities: Vec::new(),
+            debug: false
         }
     }
 
+    /// Função a onde fica o loop da execução
     async fn run(&mut self) {
         loop {
             clear_background(Color { r: 0.0, g:0.0, b:0.0, a:1.0 });            
@@ -62,14 +66,17 @@ impl Engine {
             let delta = get_frame_time();
 
             self.update(delta);
-            self.draw_fps();
+            
+            if self.debug { self.debug(); };
+            
             self.draw(delta);
             
-            next_frame().await;
+            next_frame().await; // Solicita ao sistema operacional o próximo frame.
             self.frame_count += 1;
         }
     }
     
+
     /// Função a onde da todos os updates nas entidades
     fn update(&mut self, delta:f32) {
         for i in &mut self.entities {
@@ -77,6 +84,7 @@ impl Engine {
         }
     }
     
+
     /// Função para desenhar todas entidades
     fn draw(&self, delta:f32) {
         for i in &self.entities {
@@ -84,12 +92,14 @@ impl Engine {
         }
     }
 
+    
     /// Essa função é para adicionar uma entidade nova na engine
     pub fn add_entity(&mut self, entity:Box<dyn Entity>) {
         self.entities.push(entity);
     }
 
-    pub fn draw_fps(&mut self) {
+    
+    pub fn debug(&mut self) {
         let fps = get_fps(); 
         let frame_time = get_frame_time();
 
@@ -110,8 +120,10 @@ impl Engine {
             40.0, 
             WHITE
         );
-
     }
+
+    
+
 
 
 }
@@ -129,10 +141,10 @@ async fn main() {
     let grid = Box::new(
         Grid::create(
             [250.0, 100.0],
-            256,  // Quantidade de linhas
-            256,  // Quantidade de colunas
+            50,  // Quantidade de linhas
+            50,  // Quantidade de colunas
             0.0,  // Tamanho do gap
-            1.5,  // Tamanho da celular
+            5.0,  // Tamanho da celular
             20.0, // 20 updates por segundo
             get_colors("FireDoom/colors.json".to_string()) // Carregar as as cores
         )

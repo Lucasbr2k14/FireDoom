@@ -1,3 +1,5 @@
 - [ ] Mostrar na tela o grid
 - [ ] Fazer o fogo iniciar (só para mostrar a lógica do debaixo-x)
 - [ ] Rodar para alguns casos
+- [ ] Salvar estado do grid
+- [ ] Carregar grid novo    
