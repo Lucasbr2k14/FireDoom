@@ -152,6 +152,7 @@ impl Entity for Grid {
     fn draw(&self, delta: f32) {
         for y in 0..self.grid.len() {
             for x in 0..self.grid[y].len() {
+                println!("A");
                 draw_rectangle(
                     ((self.size + self.gap) * x as f32) + self.position[0],
                     ((self.size + self.gap) * y as f32) + self.position[1],

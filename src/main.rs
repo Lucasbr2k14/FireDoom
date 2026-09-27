@@ -101,9 +101,9 @@ impl Engine {
     pub fn debug(&mut self) {
         let fps = get_fps(); 
         let frame_time = get_frame_time();
-
         let fps_str = format!("fps: {}", fps);
         let frame_time_str = format!("frame time: {}", frame_time);
+        
         draw_text(
             fps_str, 
             10.0, 
@@ -135,7 +135,7 @@ async fn main() {
     let grid = Box::new(
         Grid::create(
             [250.0, 100.0],
-            60,  // Quantidade de linhas
+            25,  // Quantidade de linhas
             60,  // Quantidade de colunas
             0.0,  // Tamanho do gap
             10.0, // Tamanho da celular

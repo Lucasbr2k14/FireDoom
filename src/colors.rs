@@ -22,7 +22,7 @@ struct MyColor {
 
 pub fn get_colors(file:String) -> Vec<Color> {
     
-    let mut content = include_str!("../FireDoom/colors.json");
+    let content = include_str!("../FireDoom/colors.json");
 
     let values:Vec<MyColor> = serde_json::from_str(&content)
     .expect("Erro ao desserializar o json colors.json");
