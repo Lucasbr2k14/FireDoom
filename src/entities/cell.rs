@@ -28,20 +28,6 @@ pub struct Grid {
     auto_update: bool,
 }
 
-pub struct Vizinhos {
-    up:    Option<u8>,
-    down:  Option<u8>,
-    left:  Option<u8>,
-    right: Option<u8>,
-}
-
-impl Vizinhos {
-    fn default() -> Self {
-        Self { up:None, down:None, left:None, right:None }
-    }
-}
-
-
 impl Grid {
     /// Função construtora para criar a matriz e depois rendenizar 
     pub fn create(
@@ -65,43 +51,6 @@ impl Grid {
             auto_update: true,
             position:position
         }
-    }
-
-    /// Essa função retorna todos os vizinhos de um ponto da grid
-    /// Mas os vizinhos sempre são {cima, baixo, esquerda, direita}
-    /// sendo associado a Vizinhança de Von neumann
-    fn get_vizinhos(&mut self, x: usize, y: usize) -> Vizinhos {
-        let cols = self.cols;
-        let rows = self.rows;
-
-        let mut vi = Vizinhos::default();
-
-        // Verifica se x e y estão dentro dos limites do grid
-        if x >= cols || y >= rows {
-            return vi;
-        }
-
-        // Vizinho de cima
-        if y > 0 {
-            vi.up = Some(self.grid[x][y - 1]);
-        }
-
-        // Vizinho de baixo
-        if y + 1 < rows {
-            vi.down = Some(self.grid[x][y + 1]);
-        }
-
-        // Vizinho da esquerda
-        if x > 0 {
-            vi.left = Some(self.grid[x - 1][y]);
-        }
-
-        // Vizinho da direita
-        if x + 1 < cols {
-            vi.right = Some(self.grid[x + 1][y]);
-        }
-
-        vi
     }
 
     /// Função para receber o x,y e retorna a temperatura
@@ -141,7 +90,12 @@ impl Grid {
         }
     }
     
-    pub fn save() {}
+
+    pub fn save(&mut self, ) {
+
+    }
+
+
     pub fn load() {}
 }
 
