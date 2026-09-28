@@ -8,7 +8,7 @@ Foi usada para gerar os gráficos e para os inputs do usuários.
 ### Serde e serde json
 Para serializar o json para entrada e saída do programa com json.
 
-## Como instlar e executar
+## Como instalar e executar
 
 ### Instalar cargo e o rust
 Para realizar a instalação é preciso instlar o rust e o cargo ver no link [Página oficial do rust](https://rust-lang.org/).
