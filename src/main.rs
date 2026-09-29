@@ -135,7 +135,7 @@ async fn main() {
     let grid = Box::new(
         Grid::create(
             [250.0, 100.0],
-            25,  // Quantidade de linhas
+            60,  // Quantidade de linhas
             60,  // Quantidade de colunas
             0.0,  // Tamanho do gap
             10.0, // Tamanho da celular
